@@ -17,10 +17,9 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         await client.connect();
-        console.log('connected')
         const database = client.db('watch_world');
         const productCollection = database.collection('products');
-        // const orderCollection = database.collection('orders');
+        const orderCollection = database.collection('orders');
         
 
         //GET Products API
@@ -30,8 +29,22 @@ async function run() {
             res.send(products);
         });
 
+        // app.get('/orders', async (req, res) => {
+        //     const cursor = orderCollection.find({});
+        //     const orders = await cursor.toArray();
+        //     res.send(orders);
+        //     console.log(orders)
+        // })
 
+        // POST API
+        app.post('/orders', async (req, res) => {
+            const order = req.body;
+            const result = await orderCollection.insertOne(order);
+            res.json(result);
+            console.log(result)
+        })
 
+        
        
 
     }
